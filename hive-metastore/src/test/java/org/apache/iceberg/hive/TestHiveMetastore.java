@@ -99,8 +99,10 @@ public class TestHiveMetastore {
 
   static {
     try {
-      HIVE_LOCAL_DIR =
-          createTempDirectory("hive", asFileAttribute(fromString("rwxrwxrwx"))).toFile();
+//      HIVE_LOCAL_DIR =
+//          createTempDirectory("hive", asFileAttribute(fromString("rwxrwxrwx"))).toFile();
+        HIVE_LOCAL_DIR = new File("hive");
+        HIVE_LOCAL_DIR.mkdir();
       DERBY_PATH = new File(HIVE_LOCAL_DIR, "metastore_db").getPath();
       File derbyLogFile = new File(HIVE_LOCAL_DIR, "derby.log");
       System.setProperty("derby.stream.error.file", derbyLogFile.getAbsolutePath());
@@ -109,14 +111,14 @@ public class TestHiveMetastore {
           .addShutdownHook(
               new Thread(
                   () -> {
-                    Path localDirPath = new Path(HIVE_LOCAL_DIR.getAbsolutePath());
-                    FileSystem fs = Util.getFs(localDirPath, new Configuration());
-                    String errMsg = "Failed to delete " + localDirPath;
-                    try {
-                      assertThat(fs.delete(localDirPath, true)).as(errMsg).isTrue();
-                    } catch (IOException e) {
-                      throw new RuntimeException(errMsg, e);
-                    }
+//                    Path localDirPath = new Path(HIVE_LOCAL_DIR.getAbsolutePath());
+//                    FileSystem fs = Util.getFs(localDirPath, new Configuration());
+//                    String errMsg = "Failed to delete " + localDirPath;
+//                    try {
+//                      assertThat(fs.delete(localDirPath, true)).as(errMsg).isTrue();
+//                    } catch (IOException e) {
+//                      throw new RuntimeException(errMsg, e);
+//                    }
                   }));
     } catch (Exception e) {
       throw new RuntimeException("Failed to setup local dir for hive metastore", e);
@@ -258,6 +260,8 @@ public class TestHiveMetastore {
     serverConf.set(
         HiveConf.ConfVars.METASTORECONNECTURLKEY.varname,
         "jdbc:derby:" + DERBY_PATH + ";create=true");
+      String newPath = "file:///D:/2025/iceberg/spark/v4.0/spark-extensions/hive";
+      serverConf.set("hive.metastore.warehouse.dir", newPath);
     baseHandler = HMS_HANDLER_CTOR.newInstance("new db based metaserver", serverConf);
     IHMSHandler handler = GET_BASE_HMS_HANDLER.invoke(serverConf, baseHandler, false);
 

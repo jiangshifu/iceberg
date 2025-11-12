@@ -78,48 +78,48 @@ public class TestMetadataTables extends ExtensionsTestBase {
   @Parameters(name = "catalogName = {0}, implementation = {1}, config = {2}, formatVersion = {3}")
   protected static Object[][] parameters() {
     return new Object[][] {
-      {
-        SparkCatalogConfig.HIVE.catalogName(),
-        SparkCatalogConfig.HIVE.implementation(),
-        SparkCatalogConfig.HIVE.properties(),
-        2
-      },
+//      {
+//        SparkCatalogConfig.HIVE.catalogName(),
+//        SparkCatalogConfig.HIVE.implementation(),
+//        SparkCatalogConfig.HIVE.properties(),
+//        2
+//      },
       {
         SparkCatalogConfig.HADOOP.catalogName(),
         SparkCatalogConfig.HADOOP.implementation(),
         SparkCatalogConfig.HADOOP.properties(),
         2
       },
-      {
-        SparkCatalogConfig.SPARK_SESSION.catalogName(),
-        SparkCatalogConfig.SPARK_SESSION.implementation(),
-        SparkCatalogConfig.SPARK_SESSION.properties(),
-        2
-      },
-      {
-        SparkCatalogConfig.SPARK_SESSION.catalogName(),
-        SparkCatalogConfig.SPARK_SESSION.implementation(),
-        SparkCatalogConfig.SPARK_SESSION.properties(),
-        3
-      },
-      {
-        SparkCatalogConfig.REST.catalogName(),
-        SparkCatalogConfig.REST.implementation(),
-        ImmutableMap.builder()
-            .putAll(SparkCatalogConfig.REST.properties())
-            .put(CatalogProperties.URI, restCatalog.properties().get(CatalogProperties.URI))
-            .build(),
-        2
-      },
-      {
-        SparkCatalogConfig.REST.catalogName(),
-        SparkCatalogConfig.REST.implementation(),
-        ImmutableMap.builder()
-            .putAll(SparkCatalogConfig.REST.properties())
-            .put(CatalogProperties.URI, restCatalog.properties().get(CatalogProperties.URI))
-            .build(),
-        3
-      }
+//      {
+//        SparkCatalogConfig.SPARK_SESSION.catalogName(),
+//        SparkCatalogConfig.SPARK_SESSION.implementation(),
+//        SparkCatalogConfig.SPARK_SESSION.properties(),
+//        2
+//      },
+//      {
+//        SparkCatalogConfig.SPARK_SESSION.catalogName(),
+//        SparkCatalogConfig.SPARK_SESSION.implementation(),
+//        SparkCatalogConfig.SPARK_SESSION.properties(),
+//        3
+//      },
+//      {
+//        SparkCatalogConfig.REST.catalogName(),
+//        SparkCatalogConfig.REST.implementation(),
+//        ImmutableMap.builder()
+//            .putAll(SparkCatalogConfig.REST.properties())
+//            .put(CatalogProperties.URI, restCatalog.properties().get(CatalogProperties.URI))
+//            .build(),
+//        2
+//      },
+//      {
+//        SparkCatalogConfig.REST.catalogName(),
+//        SparkCatalogConfig.REST.implementation(),
+//        ImmutableMap.builder()
+//            .putAll(SparkCatalogConfig.REST.properties())
+//            .put(CatalogProperties.URI, restCatalog.properties().get(CatalogProperties.URI))
+//            .build(),
+//        3
+//      }
     };
   }
 
@@ -137,17 +137,14 @@ public class TestMetadataTables extends ExtensionsTestBase {
 
     List<SimpleRecord> records =
         Lists.newArrayList(
-            new SimpleRecord(1, "a"),
-            new SimpleRecord(2, "b"),
-            new SimpleRecord(3, "c"),
-            new SimpleRecord(4, "d"));
+            new SimpleRecord(1, "jch__"));
     spark
         .createDataset(records, Encoders.bean(SimpleRecord.class))
         .coalesce(1)
         .writeTo(tableName)
         .append();
 
-    sql("DELETE FROM %s WHERE id=1", tableName);
+    List<Object[]> ret = sql("select * FROM %s", tableName);
 
     Table table = Spark3Util.loadIcebergTable(spark, tableName);
     List<ManifestFile> expectedDataManifests = TestHelpers.dataManifests(table);

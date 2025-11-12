@@ -109,6 +109,7 @@ public class HadoopCatalog extends BaseMetastoreCatalog
 
     this.catalogName = name;
     this.warehouseLocation = LocationUtil.stripTrailingSlash(inputWarehouseLocation);
+      this.warehouseLocation = warehouseLocation.replace("file:", "file:///");
     this.fs = Util.getFs(new Path(warehouseLocation), conf);
 
     String fileIOImpl =
