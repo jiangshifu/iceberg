@@ -23,6 +23,9 @@ import static java.nio.file.attribute.PosixFilePermissions.asFileAttribute;
 import static java.nio.file.attribute.PosixFilePermissions.fromString;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.IOException;
+import java.nio.file.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,8 +100,27 @@ public class TestHiveMetastore {
   private static final File HIVE_LOCAL_DIR;
   private static final String DERBY_PATH;
 
+    public static boolean deleteFolder(File folder) {
+        if (folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteFolder(file); // 递归删除子文件和子目录
+                }
+            }
+        }
+        return folder.delete(); // 删除文件或空目录
+    }
+
   static {
     try {
+
+        
+
+        File f = new File("D:\\2025\\iceberg\\spark\\v4.0\\spark-extensions\\hive");
+
+        boolean curRet = deleteFolder(f);
+
 //      HIVE_LOCAL_DIR =
 //          createTempDirectory("hive", asFileAttribute(fromString("rwxrwxrwx"))).toFile();
         HIVE_LOCAL_DIR = new File("hive");

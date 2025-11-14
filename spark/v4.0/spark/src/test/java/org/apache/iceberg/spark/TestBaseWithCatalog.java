@@ -87,6 +87,7 @@ public abstract class TestBaseWithCatalog extends TestBase {
   @BeforeAll
   public static void setUpAll() throws IOException {
     TestBaseWithCatalog.warehouse = File.createTempFile("warehouse", null);
+
     assertThat(warehouse.delete()).isTrue();
     restCatalog = REST_SERVER_EXTENSION.client();
   }

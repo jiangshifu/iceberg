@@ -135,6 +135,7 @@ public class TestMetadataTables extends ExtensionsTestBase {
             + "('format-version'='%s', 'write.delete.mode'='merge-on-read')",
         tableName, formatVersion);
 
+
     List<SimpleRecord> records =
         Lists.newArrayList(
             new SimpleRecord(1, "jch__"));
